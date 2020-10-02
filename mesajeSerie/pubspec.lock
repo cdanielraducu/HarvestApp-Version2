@@ -36,6 +36,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.0"
+  black_hole_flutter:
+    dependency: transitive
+    description:
+      name: black_hole_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.14"
   boolean_selector:
     dependency: transitive
     description:
@@ -92,6 +99,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
+  dartx:
+    dependency: transitive
+    description:
+      name: dartx
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   expansion_card:
     dependency: "direct main"
     description:
@@ -184,6 +198,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4"
+  list_diff:
+    dependency: transitive
+    description:
+      name: list_diff
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.1"
   matcher:
     dependency: transitive
     description:
@@ -350,6 +371,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
+  swipeable_page_route:
+    dependency: "direct main"
+    description:
+      name: swipeable_page_route
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.4"
   synchronized:
     dependency: transitive
     description:
@@ -371,6 +399,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.17"
+  time:
+    dependency: transitive
+    description:
+      name: time
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.3.0"
   typed_data:
     dependency: transitive
     description:
@@ -457,4 +492,4 @@ packages:
     version: "2.2.1"
 sdks:
   dart: ">=2.9.0-14.0.dev <3.0.0"
-  flutter: ">=1.12.13+hotfix.5 <2.0.0"
+  flutter: ">=1.17.0 <2.0.0"

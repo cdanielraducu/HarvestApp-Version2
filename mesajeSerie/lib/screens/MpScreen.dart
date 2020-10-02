@@ -12,13 +12,17 @@ class MpScreen extends StatefulWidget {
   static const routeName = '/mp';
   static const double pi = 3.1415926535897932;
 
+  final Mesaj mesaj;
+
+  MpScreen(this.mesaj);
+
   @override
   _MpScreenState createState() => _MpScreenState();
 }
 
 class _MpScreenState extends State<MpScreen> {
   MediaItem mediaItemFromMesaj;
-  Mesaj mesaj;
+  // Mesaj mesaj;
 
   @override
   void dispose() {
@@ -33,8 +37,8 @@ class _MpScreenState extends State<MpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    mesaj = ModalRoute.of(context).settings.arguments as Mesaj;
-    mediaItemFromMesaj = mesaj.mediaItem;
+    // widget.mesaj = ModalRoute.of(context).settings.arguments as Mesaj;
+    mediaItemFromMesaj = widget.mesaj.mediaItem;
 
     return Scaffold(
       //appBar: AppBar(),
@@ -47,7 +51,7 @@ class _MpScreenState extends State<MpScreen> {
         ),
         routes: {},
         home: AudioServiceWidget(
-            child: MainScreen(mesaj, mediaItemFromMesaj, context)),
+            child: MainScreen(widget.mesaj, mediaItemFromMesaj, context)),
       ),
     );
   }

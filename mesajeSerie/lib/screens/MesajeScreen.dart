@@ -5,12 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:mesajeSerie/providers/Mesaj.dart';
 import 'package:mesajeSerie/providers/Serie.dart';
 import 'package:mesajeSerie/screens/mpScreen.dart';
+import 'package:swipeable_page_route/swipeable_page_route.dart';
 
 class MesajeScreen extends StatelessWidget {
   static const routeName = '/mesaje';
+  final Serie serie;
+
+  MesajeScreen(this.serie);
+
   @override
   Widget build(BuildContext context) {
-    final serie = ModalRoute.of(context).settings.arguments as Serie;
+    // final serie = ModalRoute.of(context).settings.arguments as Serie;
 
     final theme = Theme.of(context).copyWith(
       dividerColor: Colors.transparent,
@@ -179,7 +184,9 @@ class MesajeScreen extends StatelessWidget {
       trailing: IconButton(
         iconSize: 25,
         onPressed: () {
-          Navigator.of(context).pushNamed(MpScreen.routeName, arguments: mesaj);
+          Navigator.of(context)
+              .push<void>(SwipeablePageRoute(builder: (_) => MpScreen(mesaj)));
+          // .pushNamed(MpScreen.routeName, arguments: mesaj);
         },
         icon: Icon(
           Icons.arrow_forward,

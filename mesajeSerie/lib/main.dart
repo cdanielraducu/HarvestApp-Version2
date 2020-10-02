@@ -33,8 +33,8 @@ class MyApp extends StatelessWidget {
         ),
         home: SeriiOverviewScreen(),
         routes: {
-          MesajeScreen.routeName: (ctx) => MesajeScreen(),
-          MpScreen.routeName: (ctx) => MpScreen(),
+          // MesajeScreen.routeName: (ctx) => MesajeScreen(),
+          // MpScreen.routeName: (ctx) => MpScreen(),
           //NewPdfScreen.routeName: (ctx) => NewPdfScreen(),
         },
       ),

@@ -5,6 +5,7 @@ import 'package:mesajeSerie/screens/MesajeScreen.dart';
 import 'package:parallax_image/parallax_image.dart';
 
 import 'package:provider/provider.dart';
+import 'package:swipeable_page_route/swipeable_page_route.dart';
 
 class SeriiOverviewScreen extends StatefulWidget {
   @override
@@ -123,8 +124,9 @@ class _SeriiOverviewScreenState extends State<SeriiOverviewScreen> {
       padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 1.0),
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context)
-              .pushNamed(MesajeScreen.routeName, arguments: serie);
+          Navigator.of(context).push<void>(
+              SwipeablePageRoute(builder: (_) => MesajeScreen(serie)));
+          // .pushNamed(MesajeScreen.routeName, arguments: serie);
         },
         child: Card(
           elevation: 10.0,
@@ -148,7 +150,7 @@ class _SeriiOverviewScreenState extends State<SeriiOverviewScreen> {
                     Container(
                       alignment: Alignment.center,
                       padding: EdgeInsets.all(6.0),
-                      height: 120.0,
+                      height: MediaQuery.of(context).size.height * 0.27,
                       width: double.infinity,
                       child: Text(
                         serie.titlu,
@@ -175,12 +177,17 @@ class _SeriiOverviewScreenState extends State<SeriiOverviewScreen> {
                       ],
                     ),
                   ),
-                  child:
-                      //Image.network(serie.imageUrl),
-                      ParallaxImage(
-                    extent: 120.0,
-                    image: networkImage,
+                  child: Container(
+                    height: MediaQuery.of(context).size.height * 0.27,
+                    child: Image.network(
+                      serie.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                  //     ParallaxImage(
+                  //   extent: 120.0,
+                  //   image: networkImage,
+                  // ),
                 ),
               ],
             ),
