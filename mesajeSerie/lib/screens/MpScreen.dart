@@ -158,12 +158,26 @@ class _MainScreenState extends State<MainScreen> {
             builder: (context, snapshot) {
               final screenState = snapshot.data;
               //final queue = screenState?.queue;
-              /// de lucrat aici
-              final mediaItem = widget.mediaItemFromMesaj;
+
+              /// aici a trebuit sa fac un mediaItem de la zero punand Duration-ul de la mesaj
+              /// in loc de duration de la mediaItemReceived pentru ca e o problema cu primirea
+              /// datelor la duration, pentru a vedea asta decomenteaza liniile 61-62 de la Serii.dart
+              final mediaItem = MediaItem(
+                id: widget.mediaItemFromMesaj.id,
+                album: widget.mediaItemFromMesaj.album,
+                title: widget.mediaItemFromMesaj.title,
+                artist: widget.mediaItemFromMesaj.artist,
+                duration: Duration(
+                    minutes: widget.mesaj.durataMin,
+                    seconds: widget.mesaj.durataSec),
+                artUri: widget.mediaItemFromMesaj.artUri,
+              );
+              //  widget.mediaItemFromMesaj;
               final state = screenState?.playbackState;
               final processingState =
                   state?.processingState ?? AudioProcessingState.none;
               final playing = state?.playing ?? false;
+              // final duration = mediaItem.duration.inMilliseconds;
 
               return Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -338,7 +352,14 @@ class _MainScreenState extends State<MainScreen> {
                         if (processingState == AudioProcessingState.none) ...[
                           Column(
                             children: [
-                              audioPlayerButton(mediaItem.title),
+                              audioPlayerButton(
+                                mediaItem.id,
+                                mediaItem.album,
+                                mediaItem.title,
+                                mediaItem.artist,
+                                mediaItem.duration.inMilliseconds,
+                                mediaItem.artUri,
+                              ),
                               Container(
                                 child: Text('Predica'),
                               )
@@ -476,12 +497,31 @@ class _MainScreenState extends State<MainScreen> {
           (queue, mediaItem, playbackState) =>
               ScreenState(queue, mediaItem, playbackState));
 
-  FlatButton audioPlayerButton(String appBarTitle) => startButton(
+  FlatButton audioPlayerButton(String id, String album, String title,
+          String artist, int duration, String artUri) =>
+      startButton(
         'Start Predica',
         () async {
           await AudioService.start(
             backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
-            androidNotificationChannelName: appBarTitle,
+            androidNotificationChannelName: title,
+            params: {
+              'id': id,
+              'album': album,
+              'title': title,
+              'artist': artist,
+              'duration': duration,
+              'artUri': artUri
+            },
+            // MediaItem(
+            //   id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
+            //   album: "Science Friday",
+            //   title: "A Salute To Head-Scratching Science",
+            //   artist: "Science Friday and WNYC Studios",
+            //   duration: Duration(milliseconds: 5739820),
+            //   artUri:
+            //       "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+            // ),
             // Enable this if you want the Android service to exit the foreground state on pause.
             //androidStopForegroundOnPause: true,
             androidNotificationColor: 0xFF2196f3,
@@ -638,13 +678,38 @@ class AudioPlayerTask extends BackgroundAudioTask {
 
   List<MediaItem> get queue => _mediaLibrary.items;
   int get index => _player.currentIndex;
-  MediaItem get mediaItem => index == null ? null : queue[index];
+  MediaItem mediaItem;
 
   @override
   Future<void> onStart(Map<String, dynamic> params) async {
+    String titlu = params['title'];
+    String artUri = params['artUri'];
+    MediaItem mediaItemReceived = MediaItem(
+      id: params['id'],
+      album: params['album'],
+      title: params['title'],
+      artist: params['artist'],
+      duration: Duration(milliseconds: params['duration']),
+      artUri: params['artUri'],
+    );
+    mediaItem = mediaItemReceived;
+
+    /*
+// MediaItem(
+    //   id: "https://s3.amazonaws.com/scifri-episodes/scifri20181123-episode.mp3",
+    //   album: "Science Friday",
+    //   title: "A Salute To Head-Scratching Science",
+    //   artist: "Science Friday and WNYC Studios",
+    //   duration: Duration(milliseconds: 5739820),
+    //   artUri:
+    //       "https://media.wnyc.org/i/1400/1400/l/80/1/ScienceFriday_WNYCStudios_1400.jpg",
+    // ),
+    */
+    print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    print(mediaItemReceived.title);
     // Broadcast media item changes.
     _player.currentIndexStream.listen((index) {
-      if (index != null) AudioServiceBackground.setMediaItem(queue[index]);
+      if (index != null) AudioServiceBackground.setMediaItem(mediaItemReceived);
     });
     // Propagate all events from the audio player to AudioService clients.
     _eventSubscription = _player.playbackEventStream.listen((event) {
@@ -670,10 +735,13 @@ class AudioPlayerTask extends BackgroundAudioTask {
     // Load and broadcast the queue
     AudioServiceBackground.setQueue(queue);
     try {
-      await _player.load(ConcatenatingAudioSource(
-        children:
-            queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
-      ));
+      await _player.load(
+        // ConcatenatingAudioSource(
+        // children:
+        // queue.map((item) => AudioSource.uri(Uri.parse(item.id))).toList(),
+        AudioSource.uri(Uri.parse(mediaItemReceived.id)),
+        // )
+      );
       // In this example, we automatically start playing on start.
       onPlay();
     } catch (e) {
@@ -781,9 +849,9 @@ class AudioPlayerTask extends BackgroundAudioTask {
         MediaControl.fastForward,
       ],
       systemActions: [
-        //MediaAction.seekTo,
-        // MediaAction.seekForward,
-        // MediaAction.seekBackward,
+        MediaAction.seekTo,
+        MediaAction.seekForward,
+        MediaAction.seekBackward,
       ],
       processingState: _getProcessingState(),
       playing: _player.playing,

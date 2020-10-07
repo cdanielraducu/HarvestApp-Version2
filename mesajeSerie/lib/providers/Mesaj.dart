@@ -6,10 +6,13 @@ class Mesaj with ChangeNotifier {
   final String titlu;
   final String data;
   final String pasaj;
+
   final String ideeaCentrala;
   final List<Punct> puncte;
   final MediaItem mediaItem;
   final String pdfUrl;
+  final int durataMin;
+  final int durataSec;
 
   Mesaj({
     @required this.titlu,
@@ -19,5 +22,7 @@ class Mesaj with ChangeNotifier {
     @required this.puncte,
     @required this.mediaItem,
     this.pdfUrl = '',
+    @required this.durataMin,
+    @required this.durataSec,
   });
 }

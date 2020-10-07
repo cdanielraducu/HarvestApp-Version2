@@ -41,7 +41,7 @@ class Serii with ChangeNotifier {
       }
 
       extractedDataReversed.forEach((serieData) {
-        print(serieData['titlu']);
+        // print(serieData['titlu']);
 
         List<Mesaj> mesaje = [];
 
@@ -57,15 +57,24 @@ class Serii with ChangeNotifier {
             });
           }
 
+          // print('ZZZZZZZZZZZZZZZZZZZZZZZZZZ');
+          // print(mesaj['DurataMin']);
+
           MediaItem mediaItem = MediaItem(
-            id: 'https://firebasestorage.googleapis.com/v0/b/harvestapp-24d89.appspot.com/o/Songs%2FDansul%20conjugal%2FCe%20conteaza%20cu%20adevarat%20in%20familie.mp3?alt=media&token=900edb1a-518f-47ea-a1ec-39b6b9b838f0',
+            id: mesaj['Audiolink'],
             album: serieData['titlu'],
             title: mesaj['Titlu'],
-            duration: Duration(minutes: 59),
+            artist: mesaj['Fratele'],
+            duration: Duration(
+              minutes: 20,
+              // int.parse(mesaj['DurataMin']),
+              seconds: 20,
+              // int.parse(mesaj['DurataSec']),
+            ),
             artUri: serieData['imageUrl'],
           );
 
-          mesaje.add(Mesaj(
+          Mesaj mesajReceived = Mesaj(
             data: mesaj['Data'],
             ideeaCentrala: mesaj['IdeeaCentrala'],
             pasaj: mesaj['Pasaj'],
@@ -73,7 +82,11 @@ class Serii with ChangeNotifier {
             puncte: puncte,
             mediaItem: mediaItem,
             pdfUrl: mesaj['PdfUrl'],
-          ));
+            durataMin: mesaj['DurataMin'],
+            durataSec: mesaj['DurataSec'],
+          );
+
+          mesaje.add(mesajReceived);
         });
 
         loadedProducts.add(Serie(
